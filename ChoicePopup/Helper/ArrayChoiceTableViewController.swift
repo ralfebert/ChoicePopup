@@ -1,6 +1,7 @@
 // Copyright 2018, Ralf Ebert
 // License   https://opensource.org/licenses/MIT
 // License   https://creativecommons.org/publicdomain/zero/1.0/
+// Source    https://www.ralfebert.de/ios-examples/uikit/choicepopover/
 
 import UIKit
 
