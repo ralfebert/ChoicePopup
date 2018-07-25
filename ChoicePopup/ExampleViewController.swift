@@ -1,48 +1,33 @@
 import UIKit
 
-@objc enum Direction : Int, CustomStringConvertible {
+enum Direction : String {
     
     case north, east, south, west
     
     static var allValues = [Direction.north, .east, .south, .west]
     
-    var description: String {
-        switch self {
-        case .north: return "north"
-        case .east: return "east"
-        case .south: return "south"
-        case .west: return "west"
-        }
-    }
-
 }
 
-class ExampleModel : NSObject {
-    @objc dynamic var direction = Direction.north
+struct ExampleModel {
+    var direction = Direction.north
 }
 
 
 class ExampleViewController : UIViewController {
     
-    var model = ExampleModel()
-    var observers : [NSKeyValueObservation] = []
+    var model = ExampleModel() {
+        didSet {
+            self.view.setNeedsLayout()
+        }
+    }
 
     @IBOutlet weak var button: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.observers = bindModel()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.button.setTitle(String(describing: model.direction), for: .normal)
     }
-    
-    private func bindModel() -> [NSKeyValueObservation] {
-        return [
-            self.model.observe(\.direction, options: .initial) { (model, _) in
-                self.button.setTitle(String(describing: model.direction), for: .normal)
-            }
-        ]
-    }
-    
+
     @IBAction func showDirectionPopup(_ sender: UIView) {
         let controller = ArrayChoiceTableViewController(Direction.allValues) { (direction) in
             self.model.direction = direction
